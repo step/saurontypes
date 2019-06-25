@@ -20,3 +20,10 @@ func (m AngmarMessage) String() string {
 	builder.WriteString("Pusher: " + m.Pusher + "\n")
 	return builder.String()
 }
+
+// UrukMessage is a struct that encapsulates the message that Uruk
+// listens to on a queue for
+type UrukMessage struct {
+	ImageName    string
+	RepoLocation string
+}
