@@ -5,11 +5,12 @@ import "strings"
 // AngmarMessage is a struct that encapsulates the message that Angmar
 // listens to on a queue for.
 type AngmarMessage struct {
-	Url     string
-	SHA     string
-	Pusher  string
-	Project string
-	Tasks   []string
+	Url       string   `json:"url"`
+	SHA       string   `json:"sha"`
+	Pusher    string   `json:"pusher"`
+	Project   string   `json:"project"`
+	ImageName string   `json:"imageName"`
+	Tasks     []string `json:"tasks"`
 }
 
 // String returns a stringified version of AngmarMessage, but doesn't
@@ -36,4 +37,11 @@ func (m UrukMessage) String() string {
 	builder.WriteString("Image: " + m.ImageName + "\n")
 	builder.WriteString("Repo Location: " + m.RepoLocation + "\n")
 	return builder.String()
+}
+
+func ConvertAngmarToUrukMessage(angmarMessage AngmarMessage, repoLocation string) UrukMessage {
+	return UrukMessage{
+		ImageName:    angmarMessage.ImageName,
+		RepoLocation: repoLocation,
+	}
 }
