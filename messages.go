@@ -2,15 +2,21 @@ package saurontypes
 
 import "strings"
 
+// Task is a struct that encapsulates the mapping between the
+// queue to place a task on and the name of the image to be run
+type Task struct {
+	Queue     string `json:"queue"`
+	ImageName string `json:"imageName"`
+}
+
 // AngmarMessage is a struct that encapsulates the message that Angmar
 // listens to on a queue for.
 type AngmarMessage struct {
-	Url       string   `json:"url"`
-	SHA       string   `json:"sha"`
-	Pusher    string   `json:"pusher"`
-	Project   string   `json:"project"`
-	ImageName string   `json:"imageName"`
-	Tasks     []string `json:"tasks"`
+	Url     string `json:"url"`
+	SHA     string `json:"sha"`
+	Pusher  string `json:"pusher"`
+	Project string `json:"project"`
+	Tasks   []Task `json:"tasks"`
 }
 
 // String returns a stringified version of AngmarMessage, but doesn't
@@ -39,9 +45,16 @@ func (m UrukMessage) String() string {
 	return builder.String()
 }
 
-func ConvertAngmarToUrukMessage(angmarMessage AngmarMessage, repoLocation string) UrukMessage {
-	return UrukMessage{
-		ImageName:    angmarMessage.ImageName,
-		RepoLocation: repoLocation,
+// ConvertAngmarToUrukMessages converts an Angmar message to a map of queue names and
+// their respective UrukMessage
+func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation string) map[string]UrukMessage {
+	urukMessages := make(map[string]UrukMessage)
+	for _, task := range angmarMessage.Tasks {
+		urukMessage := UrukMessage{
+			ImageName:    task.ImageName,
+			RepoLocation: repoLocation,
+		}
+		urukMessages[task.Queue] = urukMessage
 	}
+	return urukMessages
 }
