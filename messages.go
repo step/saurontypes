@@ -1,22 +1,37 @@
 package saurontypes
 
-import "strings"
+import (
+	"strings"
+)
 
 // Task is a struct that encapsulates the mapping between the
 // queue to place a task on and the name of the image to be run
 type Task struct {
-	Queue     string `json:"queue"`
-	ImageName string `json:"imageName"`
+	Queue     string `json:"queue" mapstructure:"queue"`
+	ImageName string `json:"image" mapstructure:"image"`
+	Name      string `json:"name" mapstructure:"name"`
+	Data      string `json:"data" mapstructure:"data"`
+}
+
+type SauronConfig struct {
+	Assignments []Assignment `json:"assignments" mapstructure:"assignments"`
+}
+
+type Assignment struct {
+	Name        string `json:"name" mapstructure:"name"`
+	Description string `json:"description" mapstructure:"description"`
+	Prefix      string `json:"prefix" mapstructure:"prefix"`
+	Tasks       []Task `json:"tasks" mapstructure:"tasks"`
 }
 
 // AngmarMessage is a struct that encapsulates the message that Angmar
 // listens to on a queue for.
 type AngmarMessage struct {
-	Url     string `json:"url"`
-	SHA     string `json:"sha"`
-	Pusher  string `json:"pusher"`
-	Project string `json:"project"`
-	Tasks   []Task `json:"tasks"`
+	Url     string `json:"url" mapstructure:"url"`
+	SHA     string `json:"sha" mapstructure:"sha"`
+	Pusher  string `json:"pusher" mapstructure:"pusher"`
+	Project string `json:"project" mapstructure:"project"`
+	Tasks   []Task `json:"tasks" mapstructure:"tasks"`
 }
 
 // String returns a stringified version of AngmarMessage, but doesn't
