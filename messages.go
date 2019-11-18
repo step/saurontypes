@@ -50,6 +50,7 @@ func (m AngmarMessage) String() string {
 type UrukMessage struct {
 	ImageName    string
 	RepoLocation string
+	DataPath     string
 }
 
 // String returns a stringified version of UrukMessage
@@ -68,6 +69,7 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 		urukMessage := UrukMessage{
 			ImageName:    task.ImageName,
 			RepoLocation: repoLocation,
+			DataPath:     task.Data,
 		}
 		urukMessages[task.Queue] = urukMessage
 	}
