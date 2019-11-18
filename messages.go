@@ -13,10 +13,15 @@ type Task struct {
 	Data      string `json:"data" mapstructure:"data"`
 }
 
+// SauronConfig is the top level config for sauron
+// This will come from the config file for sauron
+// This will contain different config for different assignments
 type SauronConfig struct {
 	Assignments []Assignment `json:"assignments" mapstructure:"assignments"`
 }
 
+// Assignment is the config for a particular assignment
+// including the name, description, prefix and the associated Tasks
 type Assignment struct {
 	Name        string `json:"name" mapstructure:"name"`
 	Description string `json:"description" mapstructure:"description"`
@@ -27,7 +32,7 @@ type Assignment struct {
 // AngmarMessage is a struct that encapsulates the message that Angmar
 // listens to on a queue for.
 type AngmarMessage struct {
-	Url     string `json:"url" mapstructure:"url"`
+	URL     string `json:"url" mapstructure:"url"`
 	SHA     string `json:"sha" mapstructure:"sha"`
 	Pusher  string `json:"pusher" mapstructure:"pusher"`
 	Project string `json:"project" mapstructure:"project"`
@@ -38,7 +43,7 @@ type AngmarMessage struct {
 // stringify the list of Tasks.
 func (m AngmarMessage) String() string {
 	var builder strings.Builder
-	builder.WriteString("URL: " + m.Url + "\n")
+	builder.WriteString("URL: " + m.URL + "\n")
 	builder.WriteString("Project: " + m.Project + "\n")
 	builder.WriteString("SHA: " + m.SHA + "\n")
 	builder.WriteString("Pusher: " + m.Pusher + "\n")
