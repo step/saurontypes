@@ -2,7 +2,23 @@ package saurontypes
 
 import (
 	"strings"
+	"time"
+
+	"github.com/google/uuid"
 )
+
+type Entry struct {
+	Key   string
+	Value interface{}
+}
+type Event struct {
+	Source    string
+	Type      string
+	FlowID    uuid.UUID
+	EventID   int64
+	Timestamp time.Time
+	PusherID  string
+}
 
 // Task is a struct that encapsulates the mapping between the
 // queue to place a task on and the name of the image to be run
