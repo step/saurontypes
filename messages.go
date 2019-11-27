@@ -80,6 +80,7 @@ type Assignment struct {
 // listens to on a queue for.
 type AngmarMessage struct {
 	URL     string `json:"url" mapstructure:"url"`
+	Stream  string `json:"stream" mapstructure:"stream"`
 	SHA     string `json:"sha" mapstructure:"sha"`
 	FlowID  string `json:"flowID" mapstructure:"flowID"`
 	Pusher  string `json:"pusher" mapstructure:"pusher"`
@@ -92,6 +93,7 @@ type AngmarMessage struct {
 func (m AngmarMessage) String() string {
 	var builder strings.Builder
 	builder.WriteString("Flow ID: " + m.FlowID + "\n")
+	builder.WriteString("Stream: " + m.Stream + "\n")
 	builder.WriteString("URL: " + m.URL + "\n")
 	builder.WriteString("Project: " + m.Project + "\n")
 	builder.WriteString("SHA: " + m.SHA + "\n")
@@ -103,6 +105,7 @@ func (m AngmarMessage) String() string {
 // listens to on a queue for
 type UrukMessage struct {
 	FlowID       string
+	Stream       string
 	ImageName    string
 	RepoLocation string
 	DataPath     string
@@ -112,6 +115,7 @@ type UrukMessage struct {
 func (m UrukMessage) String() string {
 	var builder strings.Builder
 	builder.WriteString("Flow ID: " + m.FlowID + "\n")
+	builder.WriteString("Stream: " + m.Stream + "\n")
 	builder.WriteString("Image: " + m.ImageName + "\n")
 	builder.WriteString("Repo Location: " + m.RepoLocation + "\n")
 	return builder.String()
@@ -124,6 +128,7 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 	for _, task := range angmarMessage.Tasks {
 		urukMessage := UrukMessage{
 			FlowID:       angmarMessage.FlowID,
+			Stream:       angmarMessage.Stream,
 			ImageName:    task.ImageName,
 			RepoLocation: repoLocation,
 			DataPath:     task.Data,
