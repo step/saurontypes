@@ -2,22 +2,53 @@ package saurontypes
 
 import (
 	"strings"
-	"time"
-
-	"github.com/google/uuid"
 )
 
 type Entry struct {
 	Key   string
 	Value interface{}
 }
+
 type Event struct {
 	Source    string
 	Type      string
-	FlowID    uuid.UUID
+	FlowID    string
 	EventID   int64
-	Timestamp time.Time
+	Timestamp string
 	PusherID  string
+}
+
+func (e Event) ConvertToEntry() []Entry {
+	entries := make([]Entry, 0)
+
+	entries = append(entries,
+		Entry{
+			Key:   "source",
+			Value: e.Source,
+		},
+		Entry{
+			Key:   "type",
+			Value: e.Type,
+		},
+		Entry{
+			Key:   "flowID",
+			Value: e.FlowID,
+		},
+		Entry{
+			Key:   "eventID",
+			Value: e.EventID,
+		},
+		Entry{
+			Key:   "timestamp",
+			Value: e.Timestamp,
+		},
+		Entry{
+			Key:   "pusherID",
+			Value: e.PusherID,
+		},
+	)
+
+	return entries
 }
 
 // Task is a struct that encapsulates the mapping between the
@@ -50,6 +81,7 @@ type Assignment struct {
 type AngmarMessage struct {
 	URL     string `json:"url" mapstructure:"url"`
 	SHA     string `json:"sha" mapstructure:"sha"`
+	FlowID  string `json:"flowID" mapstructure:"flowID"`
 	Pusher  string `json:"pusher" mapstructure:"pusher"`
 	Project string `json:"project" mapstructure:"project"`
 	Tasks   []Task `json:"tasks" mapstructure:"tasks"`
@@ -59,6 +91,7 @@ type AngmarMessage struct {
 // stringify the list of Tasks.
 func (m AngmarMessage) String() string {
 	var builder strings.Builder
+	builder.WriteString("Flow ID: " + m.FlowID + "\n")
 	builder.WriteString("URL: " + m.URL + "\n")
 	builder.WriteString("Project: " + m.Project + "\n")
 	builder.WriteString("SHA: " + m.SHA + "\n")
@@ -69,6 +102,7 @@ func (m AngmarMessage) String() string {
 // UrukMessage is a struct that encapsulates the message that Uruk
 // listens to on a queue for
 type UrukMessage struct {
+	FlowID       string
 	ImageName    string
 	RepoLocation string
 	DataPath     string
@@ -77,6 +111,7 @@ type UrukMessage struct {
 // String returns a stringified version of UrukMessage
 func (m UrukMessage) String() string {
 	var builder strings.Builder
+	builder.WriteString("Flow ID: " + m.FlowID + "\n")
 	builder.WriteString("Image: " + m.ImageName + "\n")
 	builder.WriteString("Repo Location: " + m.RepoLocation + "\n")
 	return builder.String()
@@ -88,6 +123,7 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 	urukMessages := make(map[string]UrukMessage)
 	for _, task := range angmarMessage.Tasks {
 		urukMessage := UrukMessage{
+			FlowID:       angmarMessage.FlowID,
 			ImageName:    task.ImageName,
 			RepoLocation: repoLocation,
 			DataPath:     task.Data,
