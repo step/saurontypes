@@ -13,9 +13,10 @@ type Event struct {
 	Source    string
 	Type      string
 	FlowID    string
-	EventID   int64
 	Timestamp string
 	PusherID  string
+	Project   string
+	Details   string
 }
 
 func (e Event) ConvertToEntry() []Entry {
@@ -35,16 +36,20 @@ func (e Event) ConvertToEntry() []Entry {
 			Value: e.FlowID,
 		},
 		Entry{
-			Key:   "eventID",
-			Value: e.EventID,
-		},
-		Entry{
 			Key:   "timestamp",
 			Value: e.Timestamp,
 		},
 		Entry{
 			Key:   "pusherID",
 			Value: e.PusherID,
+		},
+		Entry{
+			Key:   "project",
+			Value: e.Project,
+		},
+		Entry{
+			Key:   "details",
+			Value: e.Details,
 		},
 	)
 
@@ -105,6 +110,8 @@ func (m AngmarMessage) String() string {
 // listens to on a queue for
 type UrukMessage struct {
 	FlowID       string
+	Pusher       string
+	Project      string
 	Stream       string
 	ImageName    string
 	RepoLocation string
@@ -115,8 +122,10 @@ type UrukMessage struct {
 func (m UrukMessage) String() string {
 	var builder strings.Builder
 	builder.WriteString("Flow ID: " + m.FlowID + "\n")
+	builder.WriteString("Pusher: " + m.Pusher + "\n")
 	builder.WriteString("Stream: " + m.Stream + "\n")
 	builder.WriteString("Image: " + m.ImageName + "\n")
+	builder.WriteString("Project: " + m.Project + "\n")
 	builder.WriteString("Repo Location: " + m.RepoLocation + "\n")
 	return builder.String()
 }
@@ -129,6 +138,8 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 		urukMessage := UrukMessage{
 			FlowID:       angmarMessage.FlowID,
 			Stream:       angmarMessage.Stream,
+			Pusher:       angmarMessage.Pusher,
+			Project:      angmarMessage.Project,
 			ImageName:    task.ImageName,
 			RepoLocation: repoLocation,
 			DataPath:     task.Data,
