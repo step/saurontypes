@@ -9,6 +9,12 @@ type Entry struct {
 	Value interface{}
 }
 
+
+type StreamEvent struct {
+	ID string
+	Values map[string]interface{}
+}
+
 type Event struct {
 	Source    string
 	Type      string
@@ -116,6 +122,7 @@ type UrukMessage struct {
 	ImageName    string
 	RepoLocation string
 	DataPath     string
+	Job          string
 }
 
 // String returns a stringified version of UrukMessage
@@ -143,8 +150,39 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 			ImageName:    task.ImageName,
 			RepoLocation: repoLocation,
 			DataPath:     task.Data,
+			Job:          task.Name,
 		}
 		urukMessages[task.Queue] = urukMessage
 	}
 	return urukMessages
+}
+
+type Report struct {
+	Job     string `json:"job"`
+	Results string `json:"result"`
+}
+
+type Results struct {
+	Results string `json:"result.json"`
+}
+
+type TestResult struct {
+	Total   int          `json:"total"`
+	Passed  []TestReport `json:"passed"`
+	Failed  []TestReport `json:"failed"`
+	Pending []TestReport `json:"pending"`
+}
+
+type TestReport struct {
+	Suite string `json:"suite"`
+	Title string `json:"title"`
+}
+
+type DBReport struct {
+	Job     string
+	Result  TestResult
+	FlowID  string
+	Project string
+	Pusher  string
+	Time    string
 }
