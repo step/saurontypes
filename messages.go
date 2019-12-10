@@ -4,64 +4,6 @@ import (
 	"strings"
 )
 
-type Entry struct {
-	Key   string
-	Value interface{}
-}
-
-
-type StreamEvent struct {
-	ID string
-	Values map[string]interface{}
-}
-
-type Event struct {
-	Source    string
-	Type      string
-	FlowID    string
-	Timestamp string
-	PusherID  string
-	Project   string
-	Details   string
-}
-
-func (e Event) ConvertToEntry() []Entry {
-	entries := make([]Entry, 0)
-
-	entries = append(entries,
-		Entry{
-			Key:   "source",
-			Value: e.Source,
-		},
-		Entry{
-			Key:   "type",
-			Value: e.Type,
-		},
-		Entry{
-			Key:   "flowID",
-			Value: e.FlowID,
-		},
-		Entry{
-			Key:   "timestamp",
-			Value: e.Timestamp,
-		},
-		Entry{
-			Key:   "pusherID",
-			Value: e.PusherID,
-		},
-		Entry{
-			Key:   "project",
-			Value: e.Project,
-		},
-		Entry{
-			Key:   "details",
-			Value: e.Details,
-		},
-	)
-
-	return entries
-}
-
 // Task is a struct that encapsulates the mapping between the
 // queue to place a task on and the name of the image to be run
 type Task struct {
@@ -155,34 +97,4 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 		urukMessages[task.Queue] = urukMessage
 	}
 	return urukMessages
-}
-
-type Report struct {
-	Job     string `json:"job"`
-	Results string `json:"result"`
-}
-
-type Results struct {
-	Results string `json:"result.json"`
-}
-
-type TestResult struct {
-	Total   int          `json:"total"`
-	Passed  []TestReport `json:"passed"`
-	Failed  []TestReport `json:"failed"`
-	Pending []TestReport `json:"pending"`
-}
-
-type TestReport struct {
-	Suite string `json:"suite"`
-	Title string `json:"title"`
-}
-
-type DBReport struct {
-	Job     string
-	Result  TestResult
-	FlowID  string
-	Project string
-	Pusher  string
-	Time    string
 }
