@@ -65,6 +65,7 @@ type UrukMessage struct {
 	RepoLocation string
 	DataPath     string
 	Job          string
+	SHA          string
 }
 
 // String returns a stringified version of UrukMessage
@@ -89,6 +90,7 @@ func ConvertAngmarToUrukMessages(angmarMessage AngmarMessage, repoLocation strin
 			Stream:       angmarMessage.Stream,
 			Pusher:       angmarMessage.Pusher,
 			Project:      angmarMessage.Project,
+			SHA:          angmarMessage.SHA,
 			ImageName:    task.ImageName,
 			RepoLocation: repoLocation,
 			DataPath:     task.Data,

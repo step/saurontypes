@@ -6,7 +6,7 @@ type Entry struct {
 }
 
 type StreamEvent struct {
-	ID string
+	ID     string
 	Values map[string]interface{}
 }
 
@@ -18,6 +18,7 @@ type Event struct {
 	PusherID  string
 	Project   string
 	Details   string
+	SHA       string
 }
 
 func (e Event) ConvertToEntry() []Entry {
@@ -51,6 +52,10 @@ func (e Event) ConvertToEntry() []Entry {
 		Entry{
 			Key:   "details",
 			Value: e.Details,
+		},
+		Entry{
+			Key:   "sha",
+			Value: e.SHA,
 		},
 	)
 

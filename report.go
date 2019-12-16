@@ -21,11 +21,39 @@ type TestReport struct {
 	Title string `json:"title"`
 }
 
-type DBReport struct {
+type DBTestReport struct {
 	Job     string
 	Result  TestResult
 	FlowID  string
 	Project string
 	Pusher  string
 	Time    string
+	SHA     string
+}
+
+type LintReport struct {
+	RuleID   string `json:"ruleId"`
+	Severity int    `json:"severity"`
+	Message  string `json:"message"`
+	Line     int    `json:"line"`
+	Col      int    `json:"column"`
+}
+
+type LintResult struct {
+	FileName            string `json:"filePath"`
+	Messages            []LintReport
+	ErrorCount          int    `json:"errorCount"`
+	WarningCount        int    `json:"warningCount"`
+	FixableErrorCount   int    `json:"fixableErrorCount"`
+	FixableWarningCount int    `json:"fixableWarningCount"`
+}
+
+type DBLintReport struct {
+	Job     string
+	Result  []LintResult
+	FlowID  string
+	Project string
+	Pusher  string
+	Time    string
+	SHA     string
 }
