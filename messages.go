@@ -77,6 +77,7 @@ func (m UrukMessage) String() string {
 	builder.WriteString("Image: " + m.ImageName + "\n")
 	builder.WriteString("Project: " + m.Project + "\n")
 	builder.WriteString("Repo Location: " + m.RepoLocation + "\n")
+	builder.WriteString("SHA: " + m.SHA + "\n")
 	return builder.String()
 }
 
